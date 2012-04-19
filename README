@@ -1,3 +1,14 @@
+Aamplíe el traductor de Infijo a Postfijo visto en clase (https://github.com/crguezl/simple_rec_descent_parser) para que el lenguaje admita expresiones de comparación
+ 
+
+a < b
+
+a < b +2
+
+b >= 4
+
+c = a == b
+
 See "Análisis Sintáctico Predictivo Recursivo"
 http://nereida.deioc.ull.es/~pl/perlexamples/node85.html
 for a detailed description
