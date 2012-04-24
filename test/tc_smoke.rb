@@ -13,15 +13,50 @@ class TestCalcParser < Test::Unit::TestCase
     should "be #{expected} for #{input}" do
       assert_equal expected, postfix
     end
-
-    input = 'a =  5 - 3 - 2'
-    expected = 'a 5 3 - 2 - ='
+    
+    input = '1!=3'
+    expected = '1 3 !='
+    calc = Calc::Parser.new( input )
+    postfix =  calc.assignment()
+    should "be #{expected} for #{input}" do
+      assert_equal expected, postfix
+    end
+    
+    input = '1<3'
+    expected = '1 3 <'
+    calc = Calc::Parser.new( input )
+    postfix =  calc.assignment()
+    should "be #{expected} for #{input}" do
+      assert_equal expected, postfix
+    end
+    
+    
+    input = '1>=3'
+    expected = '1 3 >='
     calc = Calc::Parser.new( input )
     postfix =  calc.assignment()
     should "be #{expected} for #{input}" do
       assert_equal expected, postfix
     end
 
+    input = '2 * 3  <= 2+3'
+    expected = '2 3 * 2 3 + <='
+    calc = Calc::Parser.new( input )
+    postfix =  calc.assignment()
+    should "be #{expected} for #{input}" do
+      assert_equal expected, postfix
+    end
+    
+    input = 'a = ( 2 - 3 ) == 7'
+    expected = 'a 2 3 - 5 * 7 = =='
+    calc = Calc::Parser.new( input )
+    postfix =  calc.assignment()
+    should "be #{expected} for #{input}" do
+      assert_equal expected, postfix
+    end
+    
+    
+    
     input = 'a = b = 4 + 2'
     expected = 'a b 4 2 + = ='
     calc = Calc::Parser.new( input )
@@ -38,6 +73,14 @@ class TestCalcParser < Test::Unit::TestCase
       assert_raises(SyntaxError) {
         postfix =  calc.assignment()
       } 
+    end
+    
+    input = '1!=3==7'
+    calc = Calc::Parser.new( input )
+    should "Should raise 'SyntaxError' exception for #{input}" do
+      assert_raises(SyntaxError) {
+        postfix =  calc.assignment()
+      }
     end
 
     input = '3*/4'

@@ -86,7 +86,7 @@ module Calc
     end
 
     # Operator '=' is right associative
-    def assignment     # assignment --> expression '=' assignment | expression
+    def assignment     # assignment --> comparison '=' assignment | comparison
       val = comparison
       if (current_token.value == '=') 
         raise SyntaxError, "Error. Expected left-value, found #{val}" unless  val =~ /^[a-z_A-Z]\w*$/
@@ -97,13 +97,14 @@ module Calc
       end
     end
     
-    def comparison
+    # Operators < >  <= >= != ==
+    def comparison      #comparison  --> comparison COMOP expression  |  comparison
       exp = expression
       lookahead,sem = current_token.token, current_token.value
       if lookahead == COMOP then
 	next_token
 	exp2 = expression
-	"#{exp} #{exp2} #{sem}"
+	exp += " #{exp2} #{sem}"
       end
       exp
     end
