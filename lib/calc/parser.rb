@@ -90,6 +90,10 @@ module Calc
         val
       end
     end
+    
+    def comparison
+      
+    end
 
     def expression   # expression --> expresion /^[+-]$/ term | term
       t1 = term
