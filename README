@@ -37,7 +37,20 @@ term         : term MULOP factor
 factor       : NUMBER
              | ID
              | '(' assignment ')'
+	     |ID '(' listofopargg')'
+
+listofargs   : assigment
+	     | assigment listofargs
+
+
+listofoptargs  ->  € #vacio
+	| listofargs
+
+
+
 ;
+
+
 
 where:
 
