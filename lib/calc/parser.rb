@@ -92,7 +92,7 @@ module Calc
     def assignment     # assignment --> comparison '=' assignment | comparison
       val = comparison
       if (current_token.value == '=') 
-        raise SyntaxError, "Error. Expected left-value, found #{val}" unless  val =~ /^[a-z_A-Z]\w*$/
+        raise SyntaxError, "Error. Expected left-value, found #{val}" unless  val =~ /^\s*[a-z_A-Z]\w*\s*$/
         next_token
         "#{val} #{assignment} ="
       else
