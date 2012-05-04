@@ -35,8 +35,8 @@ term         : term MULOP factor
              | factor
 
 factor       : NUMBER
-             | ID
              | '(' assignment ')'
+<<<<<<< HEAD
 	     |ID '(' listofopargg')'
 
 listofargs   : assigment
@@ -46,6 +46,15 @@ listofargs   : assigment
 listofoptargs  ->  € #vacio
 	| listofargs
 
+=======
+             | ID resto
+
+resto        :  € #vacio
+	     | '('listofargs ')'
+
+listofargs   : assigment
+	     | assigment COMA listofargs
+>>>>>>> 34a4fe64705d41c0029d7b9307114346296c797c
 
 
 ;
@@ -59,3 +68,5 @@ MULOP  = %r{^[*/]$}
 NUMBER = /^\d+$/
 ID     = /[a-zA-Z_]\w*/
 COMOP   = ^(>=|<=|==|!=|[<>])$
+COMA = /^[,]$/
+

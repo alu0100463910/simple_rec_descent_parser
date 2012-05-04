@@ -6,17 +6,19 @@ module Calc
     OPERATOR   = 1
     NUMBER     = 2
     ID         = 3
-    UNEXPECTED = 4
-    EOI        = 5
+    COMA       = 4
+    UNEXPECTED = 5
+    EOI        = 6
 
     
     NAME = {
       0 => :COMOP,
       1 => :OPERATOR,   
       2 => :NUMBER,    
-      3 => :ID,        
-      4 => :UNEXPECTED,
-      5 => :EOI,
+      3 => :ID, 
+      4 => :COMA,
+      5 => :UNEXPECTED,
+      6 => :EOI,
 
     }
   end
@@ -46,6 +48,7 @@ module Calc
          |  ([-+*/()=;])              # OPERATOR 
          | (\d+)                     # NUMBER
          | ([a-zA-Z_]\w*)            # ID 
+	 | ([,])                     #COMA
          |(\S)                       # UNEXPECTED
 	 
       }x
@@ -133,6 +136,9 @@ module Calc
       val
     end
 
+#   factor       : NUMBER
+#              | '(' assignment ')'
+#              | ID resto
     def factor
       lookahead, sem  = current_token.token, current_token.value
       case lookahead 
@@ -140,8 +146,11 @@ module Calc
           next_token
           sem
         when ID
-          next_token
-          sem
+	  next_token
+	  r = resto
+	  val = "#{r} #{sem}"
+          #next_token
+          #sem
         else
           if sem == '(' then
             next_token
@@ -153,7 +162,47 @@ module Calc
           end
       end
     end
+    
+# resto        :  € #vacio
+# 	     | '('listofargs ')'
+    def resto
+      lookahead, sem  = current_token.token, current_token.value
+
+          if sem == '(' then
+            next_token
+            arg = listofargs()
+            match_val(')')
+            arg
+	  end
+	  #Si no entra es Cadena vacia
+    end
+
+# listofargs   : assigment
+# 	     | assigment listofargs
+    def listofargs
+      l = assignment()
+      val="#{l}"
+      while (current_token.token == COMA) 
+       # c = current_token.value
+        next_token
+        a = assignment()
+        val += " #{a} ,"
+      end
+      val
+    end
+   
   end
+  
+  
+
+    
+    
+    
+
+  
+
+
+  
 
   if $0 == __FILE__
     include Tokens
