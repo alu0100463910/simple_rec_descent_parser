@@ -5,7 +5,7 @@ require_relative "../lib/calc/parser"
 
 class TestCalcParser < Test::Unit::TestCase
 
-  context "translating" do
+context "translating" do
     input = 'a = ( 2 - 3 ) * 5'
     expected = 'a 2 3 - 5 * ='
     calc = Calc::Parser.new( input )
@@ -13,50 +13,19 @@ class TestCalcParser < Test::Unit::TestCase
     should "be #{expected} for #{input}" do
       assert_equal expected, postfix
     end
-    
-    input = '1!=3'
-    expected = '1 3 !='
-    calc = Calc::Parser.new( input )
-    postfix =  calc.assignment()
-    should "be #{expected} for #{input}" do
-      assert_equal expected, postfix
-    end
-    
-    input = '1<3'
-    expected = '1 3 <'
-    calc = Calc::Parser.new( input )
-    postfix =  calc.assignment()
-    should "be #{expected} for #{input}" do
-      assert_equal expected, postfix
-    end
-    
-    
-    input = '1>=3'
-    expected = '1 3 >='
-    calc = Calc::Parser.new( input )
-    postfix =  calc.assignment()
-    should "be #{expected} for #{input}" do
-      assert_equal expected, postfix
-    end
+  end
 
-    input = '2 * 3  <= 2+3'
-    expected = '2 3 * 2 3 + <='
+  context "translating" do
+    input = 'a =  5 - 3 - 2'
+    expected = 'a 5 3 - 2 - ='
     calc = Calc::Parser.new( input )
     postfix =  calc.assignment()
     should "be #{expected} for #{input}" do
       assert_equal expected, postfix
     end
-    
-    input = 'a = ( 2 - 3 ) == 7'
-    expected = 'a 2 3 - 5 * 7 = =='
-    calc = Calc::Parser.new( input )
-    postfix =  calc.assignment()
-    should "be #{expected} for #{input}" do
-      assert_equal expected, postfix
-    end
-    
-    
-    
+  end
+
+  context "translating" do
     input = 'a = b = 4 + 2'
     expected = 'a b 4 2 + = ='
     calc = Calc::Parser.new( input )
@@ -71,23 +40,17 @@ class TestCalcParser < Test::Unit::TestCase
     calc = Calc::Parser.new( input )
     should "Should raise 'SyntaxError' exception for #{input}" do
       assert_raises(SyntaxError) {
-        postfix =  calc.assignment()
+        calc.assignment()
       } 
     end
-    
-    input = '1!=3==7'
-    calc = Calc::Parser.new( input )
-    should "Should raise 'SyntaxError' exception for #{input}" do
-      assert_raises(SyntaxError) {
-        postfix =  calc.assignment()
-      }
-    end
+  end
 
+  context "exceptions" do
     input = '3*/4'
     calc = Calc::Parser.new( input )
-    should "Should raise 'SyntaxError' exception for #{input}" do
+    should "Should raise 'SyntaxError' exception for '3*4'" do
       assert_raises(SyntaxError) {
-        postfix =  calc.assignment()
+        calc.assignment()
       } 
     end
   end
