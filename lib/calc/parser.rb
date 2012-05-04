@@ -146,8 +146,10 @@ module Calc
           next_token
           sem
         when ID
-          next_token
-          sem
+	  r=resto
+	  val="#{r}"
+          #next_token
+          #sem
         else
           if sem == '(' then
             next_token
@@ -167,6 +169,15 @@ module Calc
 # 	     | '('listofargs ')'
 # 
     def resto
+      lookahead, sem  = current_token.token, current_token.value
+
+          if sem == '(' then
+            next_token
+            arg = listofargs()
+            match_val(')')
+            arg
+	  end
+	  #Si no entra es Cadena vacia
     end
 
 # listofargs   : assigment

@@ -42,7 +42,7 @@ resto        :  € #vacio
 	     | '('listofargs ')'
 
 listofargs   : assigment
-	     | assigment listofargs
+	     | assigment COMA listofargs
 
 
 ;
@@ -56,4 +56,5 @@ MULOP  = %r{^[*/]$}
 NUMBER = /^\d+$/
 ID     = /[a-zA-Z_]\w*/
 COMOP   = ^(>=|<=|==|!=|[<>])$
+COMA = /^[,]$/
 
