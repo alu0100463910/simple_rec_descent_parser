@@ -35,12 +35,11 @@ term         : term MULOP factor
              | factor
 
 factor       : NUMBER
-             | ID
              | '(' assignment ')'
-	     |ID '(' listofoptargs')'
+             | ID resto
 
-listofoptargs  ->  € #vacio
-	| listofargs
+resto        :  € #vacio
+	     | '('listofargs ')'
 
 listofargs   : assigment
 	     | assigment listofargs
