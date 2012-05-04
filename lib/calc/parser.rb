@@ -146,8 +146,9 @@ module Calc
           next_token
           sem
         when ID
-	  r=resto
-	  val="#{r}"
+	  next_token
+	  r = resto
+	  val = "#{r} #{sem}"
           #next_token
           #sem
         else
@@ -161,13 +162,9 @@ module Calc
           end
       end
     end
-  end
-  
-  
-# 
+    
 # resto        :  € #vacio
 # 	     | '('listofargs ')'
-# 
     def resto
       lookahead, sem  = current_token.token, current_token.value
 
@@ -183,7 +180,25 @@ module Calc
 # listofargs   : assigment
 # 	     | assigment listofargs
     def listofargs
+      l = assignment()
+      val="#{l}"
+      while (current_token.token == COMA) 
+       # c = current_token.value
+        next_token
+        a = assignment()
+        val += " #{a} ,"
+      end
+      val
     end
+   
+  end
+  
+  
+
+    
+    
+    
+
   
 
 
