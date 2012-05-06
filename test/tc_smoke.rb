@@ -34,6 +34,16 @@ context "translating" do
       assert_equal expected, postfix
     end
   end
+  
+    context "translating" do
+    input = 'h = f(g(x))'
+    expected = 'h x g f ='
+    calc = Calc::Parser.new( input )
+    postfix =  calc.assignment()
+    should "be #{expected} for #{input}" do
+      assert_equal expected, postfix
+    end
+  end
 
   context "exceptions" do
     input = ''
