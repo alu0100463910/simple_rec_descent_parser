@@ -1,4 +1,6 @@
-Aamplíe el traductor de Infijo a Postfijo visto en clase (https://github.com/crguezl/simple_rec_descent_parser) para que el lenguaje admita expresiones de comparación
+Aamplíe el traductor de Infijo a Postfijo visto en clase
+(https://github.com/crguezl/simple_rec_descent_parser) para que el lenguaje
+admita expresiones de comparación
  
 
 a < b
@@ -31,20 +33,22 @@ comparison   : comparison COMOP expression
 expression   : expression ADDOP term
              | term
 ;
+
 term         : term MULOP factor
              | factor
+;
 
 factor       : NUMBER
              | '(' assignment ')'
              | ID resto
+;
 
 resto        :  € #vacio
 	     | '('listofargs ')'
+;
 
 listofargs   : assigment
-	     | assigment COMA listofargs
-
-
+	     | assigment COMMA listofargs
 ;
 
 
@@ -56,5 +60,5 @@ MULOP  = %r{^[*/]$}
 NUMBER = /^\d+$/
 ID     = /[a-zA-Z_]\w*/
 COMOP   = ^(>=|<=|==|!=|[<>])$
-COMA = /^[,]$/
+COMMA = /^[,]$/
 

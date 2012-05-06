@@ -6,7 +6,7 @@ module Calc
     OPERATOR   = 1
     NUMBER     = 2
     ID         = 3
-    COMA       = 4
+    COMMA      = 4
     UNEXPECTED = 5
     EOI        = 6
 
@@ -16,10 +16,9 @@ module Calc
       1 => :OPERATOR,   
       2 => :NUMBER,    
       3 => :ID, 
-      4 => :COMA,
+      4 => :COMMA,
       5 => :UNEXPECTED,
       6 => :EOI,
-
     }
   end
 
@@ -48,7 +47,7 @@ module Calc
          |  ([-+*/()=;])              # OPERATOR 
          | (\d+)                     # NUMBER
          | ([a-zA-Z_]\w*)            # ID 
-	 | ([,])                     #COMA
+	 | ([,])                     #COMMA
          |(\S)                       # UNEXPECTED
 	 
       }x
@@ -80,7 +79,8 @@ module Calc
       if (v == current_token.value)
         next_token
       else
-        raise SyntaxError, "Syntax error. Expected '#{v}', found '#{current_token}'"
+        raise SyntaxError, "Syntax error. Expected '#{v}', found
+'#{current_token}'"
       end
     end
 
@@ -92,7 +92,7 @@ module Calc
     def assignment     # assignment --> comparison '=' assignment | comparison
       val = comparison
       if (current_token.value == '=') 
-        raise SyntaxError, "Error. Expected left-value, found #{val}" unless  val =~ /^[a-z_A-Z]\w*$/
+        raise SyntaxError, "Error. Expected left-value, found #{val}" unless val =~ /^\s*[a-z_A-Z]\w*\s*$/
         next_token
         "#{val} #{assignment} ="
       else
@@ -101,7 +101,7 @@ module Calc
     end
     
     # Operators < >  <= >= != ==
-    def comparison      #comparison  --> comparison COMOP expression  |  comparison
+    def comparison      #comparison  --> comparison COMOP expression  | comparison
       exp = expression
       lookahead,sem = current_token.token, current_token.value
       if lookahead == COMOP then
@@ -146,11 +146,9 @@ module Calc
           next_token
           sem
         when ID
-	  next_token
-	  r = resto
-	  val = "#{r} #{sem}"
-          #next_token
-          #sem
+          next_token
+          r = resto
+          (r ? val = "#{r} #{sem}" : val = sem) 
         else
           if sem == '(' then
             next_token
@@ -167,7 +165,7 @@ module Calc
 # 	     | '('listofargs ')'
     def resto
       lookahead, sem  = current_token.token, current_token.value
-
+      arg = ''
           if sem == '(' then
             next_token
             arg = listofargs()
@@ -180,43 +178,32 @@ module Calc
 # listofargs   : assigment
 # 	     | assigment listofargs
     def listofargs
-      l = assignment()
-      val="#{l}"
-      while (current_token.token == COMA) 
-       # c = current_token.value
+      val = assignment()
+      while (current_token.token == COMMA) 
         next_token
         a = assignment()
-        val += " #{a} ,"
+        val += " #{a}"
       end
       val
-    end
-   
+    end   
   end
   
   
-
-    
-    
-    
-
-  
-
-
-  
-
   if $0 == __FILE__
     include Tokens
 
     input = ARGV.shift || 'a = ( 2 - 3 ) * 5'
     calc = Parser.new( input )
     postfix =  calc.assignment()
-    raise SyntaxError, "Unexpected #{calc.current_token}\n" unless calc.current_token.token == EOI
+    raise SyntaxError, "Unexpected #{calc.current_token}\n" unless
+calc.current_token.token == EOI
     puts "The translation of '#{input}' to postfix is: #{postfix}"
 
     input = '3 * 5'
     calc = Parser.new( input )
     postfix =  calc.assignment()
-    raise SyntaxError, "Unexpected #{calc.current_token}\n" unless calc.current_token.token == EOI
+    raise SyntaxError, "Unexpected #{calc.current_token}\n" unless
+calc.current_token.token == EOI
     puts "The translation of '#{input}' to postfix is: #{postfix}"
   end
 end
