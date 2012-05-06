@@ -79,8 +79,7 @@ module Calc
       if (v == current_token.value)
         next_token
       else
-        raise SyntaxError, "Syntax error. Expected '#{v}', found
-'#{current_token}'"
+        raise SyntaxError, "Syntax error. Expected '#{v}', found'#{current_token}'"
       end
     end
 
@@ -195,15 +194,13 @@ module Calc
     input = ARGV.shift || 'a = ( 2 - 3 ) * 5'
     calc = Parser.new( input )
     postfix =  calc.assignment()
-    raise SyntaxError, "Unexpected #{calc.current_token}\n" unless
-calc.current_token.token == EOI
+    raise SyntaxError, "Unexpected #{calc.current_token}\n" unless calc.current_token.token == EOI
     puts "The translation of '#{input}' to postfix is: #{postfix}"
 
     input = '3 * 5'
     calc = Parser.new( input )
     postfix =  calc.assignment()
-    raise SyntaxError, "Unexpected #{calc.current_token}\n" unless
-calc.current_token.token == EOI
+    raise SyntaxError, "Unexpected #{calc.current_token}\n" unless calc.current_token.token == EOI
     puts "The translation of '#{input}' to postfix is: #{postfix}"
   end
 end
